@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editNombreComida"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de la comida"/>
+
+    <EditText
+        android:id="@+id/editCaloriasComida"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Calorías"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/btnAgregarComida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Añadir Comida"/>
+</LinearLayout>

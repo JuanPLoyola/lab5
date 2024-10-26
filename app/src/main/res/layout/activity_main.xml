@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editPeso"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Peso (kg)"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/editAltura"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Altura (cm)"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/editEdad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Edad"
+        android:inputType="number"/>
+
+    <Spinner
+        android:id="@+id/spinnerGenero"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/genero_options"/>
+
+    <Spinner
+        android:id="@+id/spinnerNivelActividad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/nivel_actividad"/>
+
+    <Spinner
+        android:id="@+id/spinnerObjetivo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/objetivo_options"/>
+
+    <Button
+        android:id="@+id/btnCalcularCalorias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calcular Calorías"/>
+
+    <TextView
+        android:id="@+id/textCaloriasRecomendadas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calorías recomendadas:"
+        android:paddingTop="16dp"/>
+</LinearLayout>

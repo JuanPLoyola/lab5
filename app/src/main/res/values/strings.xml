@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Seguimiento de Calorías</string>
+    <string-array name="genero_options">
+        <item>Masculino</item>
+        <item>Femenino</item>
+    </string-array>
+    <string-array name="nivel_actividad">
+        <item>Sedentario</item>
+        <item>Actividad ligera</item>
+        <item>Moderadamente activo</item>
+        <item>Activo</item>
+    </string-array>
+    <string-array name="objetivo_options">
+        <item>Mantener peso</item>
+        <item>Bajar de peso</item>
+        <item>Subir de peso</item>
+    </string-array>
+</resources>
