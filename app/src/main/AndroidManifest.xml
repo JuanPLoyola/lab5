@@ -28,6 +28,7 @@
         <activity android:name=".AddFoodActivity" />
 
         <receiver android:name=".AlarmaReceiver"/>
+        <receiver android:name=".ObjetivoReceiver" />
     </application>
 
 </manifest>

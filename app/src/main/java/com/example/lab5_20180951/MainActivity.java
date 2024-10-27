@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private int caloriasRecomendadas;
 
+    private EditText editIntervaloObjetivo;
+    private Button btnProgramarObjetivo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,10 +49,39 @@ public class MainActivity extends AppCompatActivity {
         textCaloriasConsumidas = findViewById(R.id.textCaloriasConsumidas);
         databaseHelper = new DatabaseHelper(this);
 
+
+        editIntervaloObjetivo = findViewById(R.id.editIntervaloObjetivo);
+        btnProgramarObjetivo = findViewById(R.id.btnProgramarObjetivo);
+
+
+
         findViewById(R.id.btnCalcularCalorias).setOnClickListener(view -> calcularCalorias());
         findViewById(R.id.btnAgregarComida).setOnClickListener(view -> abrirAddFoodActivity());
 
+        btnProgramarObjetivo.setOnClickListener(view -> {
+            String intervaloTexto = editIntervaloObjetivo.getText().toString();
+            if (!intervaloTexto.isEmpty()) {
+                int intervaloMinutos = Integer.parseInt(intervaloTexto);
+                programarNotificacionObjetivo(intervaloMinutos);
+                Toast.makeText(this, "Notificación de objetivo programada", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Por favor, ingresa un intervalo", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         actualizarCaloriasConsumidas();
+    }
+
+    private void programarNotificacionObjetivo(int intervaloMinutos) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        long intervaloMillis = intervaloMinutos * 60 * 1000; // convertir minutos a milisegundos
+
+        Intent intent = new Intent(this, ObjetivoReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, 104, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), intervaloMillis, pendingIntent);
     }
 
     private void calcularCalorias() {
@@ -112,28 +145,31 @@ public class MainActivity extends AppCompatActivity {
     private void actualizarCaloriasConsumidas() {
         int totalCalorias = databaseHelper.getTotalCalorias(); // Método que suma las calorías de todas las comidas del día
         textCaloriasConsumidas.setText("Calorías consumidas hoy: " + totalCalorias);
+        verificarExcesoCalorias(totalCalorias);
     }
 
 
     private void verificarExcesoCalorias(int caloriasConsumidas) {
         if (caloriasConsumidas > caloriasRecomendadas) {
-            // Mostrar notificación
+            // Configurar el NotificationManager y NotificationChannel
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel channel = new NotificationChannel("CALORIAS_EXCESO", "Exceso de Calorías", NotificationManager.IMPORTANCE_DEFAULT);
+                NotificationChannel channel = new NotificationChannel("EXCESO_CALORIAS", "Exceso de Calorías", NotificationManager.IMPORTANCE_HIGH);
+                channel.setDescription("Notificación de exceso de calorías");
                 notificationManager.createNotificationChannel(channel);
             }
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "CALORIAS_EXCESO")
+            // Crear la notificación
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "EXCESO_CALORIAS")
                     .setSmallIcon(R.drawable.ic_warning)
                     .setContentTitle("Alerta de Exceso de Calorías")
-                    .setContentText("Has consumido más calorías de las recomendadas. Considera reducir el consumo o realizar ejercicio.")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    .setContentText("Has consumido más calorías de las recomendadas. Considera hacer ejercicio o reducir tu siguiente comida.")
+                    .setPriority(NotificationCompat.PRIORITY_HIGH);
 
             notificationManager.notify(1, builder.build());
         }
     }
+
 
     private void programarRecordatorios() {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -150,26 +186,20 @@ public class MainActivity extends AppCompatActivity {
         cena.set(Calendar.HOUR_OF_DAY, 20);
         cena.set(Calendar.MINUTE, 0);
 
-        programarAlarma(alarmManager, desayuno, 1);
-        programarAlarma(alarmManager, almuerzo, 2);
-        programarAlarma(alarmManager, cena, 3);
+        programarAlarma(alarmManager, desayuno, 101);
+        programarAlarma(alarmManager, almuerzo, 102);
+        programarAlarma(alarmManager, cena, 103);
     }
 
     private void programarAlarma(AlarmManager alarmManager, Calendar hora, int requestCode) {
         Intent intent = new Intent(this, AlarmaReceiver.class);
+        intent.putExtra("mensaje", "Recuerda registrar tu comida.");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this,
-                requestCode,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE // Añadido FLAG_IMMUTABLE
-        );
-        alarmManager.setInexactRepeating(
-                AlarmManager.RTC_WAKEUP,
-                hora.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,
-                pendingIntent
-        );
+                this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, hora.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
+
+
 
 
 

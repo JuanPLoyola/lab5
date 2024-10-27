@@ -31,17 +31,28 @@
         android:layout_height="wrap_content"
         android:entries="@array/genero_options"/>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
     <Spinner
         android:id="@+id/spinnerNivelActividad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/nivel_actividad"/>
+        android:entries="@array/nivel_actividad" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
     <Spinner
         android:id="@+id/spinnerObjetivo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/objetivo_options"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
     <Button
         android:id="@+id/btnCalcularCalorias"
@@ -69,4 +80,22 @@
         android:text="Calorías consumidas hoy: 0"
         android:paddingTop="16dp"/>
 
+    <Button
+        android:id="@+id/btnReiniciarCalorias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reiniciar Calorías" />
+
+    <EditText
+        android:id="@+id/editIntervaloObjetivo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Intervalo en minutos (ej. 30)"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/btnProgramarObjetivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Programar Notificación de Objetivo" />
 </LinearLayout>

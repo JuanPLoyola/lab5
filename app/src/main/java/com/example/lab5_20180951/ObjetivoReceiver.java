@@ -9,25 +9,22 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
-public class AlarmaReceiver extends BroadcastReceiver {
+public class ObjetivoReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        String mensaje = intent.getStringExtra("mensaje");
-
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("RECORDATORIO_COMIDAS", "Recordatorios de Comidas", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel("NOTIFICACION_OBJETIVO", "Notificación de Objetivo", NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "RECORDATORIO_COMIDAS")
-                .setSmallIcon(R.drawable.ic_food)
-                .setContentTitle("Recordatorio de Comida")
-                .setContentText(mensaje)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "NOTIFICACION_OBJETIVO")
+                .setSmallIcon(R.drawable.ic_warning)
+                .setContentTitle("Mantente enfocado en tu objetivo")
+                .setContentText("Recuerda tu meta de consumo calórico. ¡Sigue adelante!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         notificationManager.notify((int) System.currentTimeMillis(), builder.build());
     }
 }
-
 
