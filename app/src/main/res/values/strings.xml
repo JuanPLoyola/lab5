@@ -15,4 +15,16 @@
         <item>Bajar de peso</item>
         <item>Subir de peso</item>
     </string-array>
+
+
+    <string-array name="alimentos_comunes">
+        <item>Manzana - 52 cal</item>
+        <item>Banana - 89 cal</item>
+        <item>Arroz - 130 cal</item>
+        <item>Pechuga de pollo - 165 cal</item>
+        <item>Pan - 79 cal</item>
+    </string-array>
+
 </resources>
+
+

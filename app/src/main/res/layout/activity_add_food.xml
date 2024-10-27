@@ -17,6 +17,19 @@
         android:hint="Calorías"
         android:inputType="number"/>
 
+    <Spinner
+        android:id="@+id/spinnerAlimentos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/alimentos_comunes" />
+
+    <Button
+        android:id="@+id/btnCargarCaloriasAlimento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cargar Calorías" />
+
+
     <Button
         android:id="@+id/btnGuardarComida"
         android:layout_width="wrap_content"

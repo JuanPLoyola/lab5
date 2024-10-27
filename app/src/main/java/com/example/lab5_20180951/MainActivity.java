@@ -33,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editIntervaloObjetivo;
     private Button btnProgramarObjetivo;
+    private Button btnAgregarActividad;
     private Button btnReiniciarCalorias;
+    private EditText editCaloriasActividad;
 
 
     @Override
@@ -57,10 +59,12 @@ public class MainActivity extends AppCompatActivity {
 
         btnReiniciarCalorias = findViewById(R.id.btnReiniciarCalorias);
 
-
+        editCaloriasActividad = findViewById(R.id.editCaloriasActividad);
+        btnAgregarActividad = findViewById(R.id.btnAgregarActividad);
 
         findViewById(R.id.btnCalcularCalorias).setOnClickListener(view -> calcularCalorias());
         findViewById(R.id.btnAgregarComida).setOnClickListener(view -> abrirAddFoodActivity());
+        btnAgregarActividad.setOnClickListener(view -> agregarActividadFisica());
 
         btnProgramarObjetivo.setOnClickListener(view -> {
             String intervaloTexto = editIntervaloObjetivo.getText().toString();
@@ -76,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
         btnReiniciarCalorias.setOnClickListener(view -> reiniciarCalorias());
         programarReinicioDiario();
         actualizarCaloriasConsumidas();
+        programarRecordatorios();
+
 
     }
 
@@ -149,10 +155,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void actualizarCaloriasConsumidas() {
-        int totalCalorias = databaseHelper.getTotalCalorias(); // Método que suma las calorías de todas las comidas del día
-        textCaloriasConsumidas.setText("Calorías consumidas hoy: " + totalCalorias);
-        verificarExcesoCalorias(totalCalorias);
+        int totalCaloriasConsumidas = databaseHelper.getTotalCalorias();
+        textCaloriasConsumidas.setText("Calorías consumidas hoy: " + totalCaloriasConsumidas);
+
+        int caloriasRestantes = caloriasRecomendadas - totalCaloriasConsumidas;
+        TextView textCaloriasRestantes = findViewById(R.id.textCaloriasRestantes);
+
+        if (caloriasRestantes >= 0) {
+            textCaloriasRestantes.setText("Calorías restantes para el día: " + caloriasRestantes);
+        } else {
+            textCaloriasRestantes.setText("Excediste tu meta en: " + Math.abs(caloriasRestantes) + " calorías");
+        }
+
+        verificarExcesoCalorias(totalCaloriasConsumidas);
+
     }
+
 
 
     private void verificarExcesoCalorias(int caloriasConsumidas) {
@@ -229,7 +247,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void agregarActividadFisica() {
+        if (editCaloriasActividad.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Ingrese el gasto calórico de la actividad", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        int caloriasQuemadas = Integer.parseInt(editCaloriasActividad.getText().toString());
+        databaseHelper.restarCalorias(caloriasQuemadas); // Método en DatabaseHelper para restar calorías
+        actualizarCaloriasConsumidas();
+        editCaloriasActividad.setText(""); // Limpiar campo
+        Toast.makeText(this, "Actividad registrada", Toast.LENGTH_SHORT).show();
+    }
 
 
 

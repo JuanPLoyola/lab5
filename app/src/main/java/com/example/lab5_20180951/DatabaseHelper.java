@@ -55,6 +55,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM comidas"); // Borra todas las entradas de la tabla de comidas
     }
 
+    public void restarCalorias(int calorias) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("INSERT INTO comidas (NOMBRE, CALORIAS) VALUES ('Actividad Física', -" + calorias + ")");
+    }
 
 }
 

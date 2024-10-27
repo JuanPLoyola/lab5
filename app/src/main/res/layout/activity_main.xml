@@ -80,11 +80,34 @@
         android:text="Calorías consumidas hoy: 0"
         android:paddingTop="16dp"/>
 
+    <TextView
+        android:id="@+id/textCaloriasRestantes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calorías restantes: "
+        android:paddingTop="16dp"/>
+
+
     <Button
         android:id="@+id/btnReiniciarCalorias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Reiniciar Calorías" />
+
+
+    <EditText
+        android:id="@+id/editCaloriasActividad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Calorías quemadas en la actividad"
+        android:inputType="number" />
+    <Button
+        android:id="@+id/btnAgregarActividad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Agregar Actividad Física" />
+
+
 
     <EditText
         android:id="@+id/editIntervaloObjetivo"
