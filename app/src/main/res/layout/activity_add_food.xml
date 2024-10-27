@@ -18,8 +18,8 @@
         android:inputType="number"/>
 
     <Button
-        android:id="@+id/btnAgregarComida"
+        android:id="@+id/btnGuardarComida"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Añadir Comida"/>
+        android:text="Guardar Comida"/>
 </LinearLayout>

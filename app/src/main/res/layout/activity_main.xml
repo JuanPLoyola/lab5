@@ -55,4 +55,18 @@
         android:layout_height="wrap_content"
         android:text="Calorías recomendadas:"
         android:paddingTop="16dp"/>
+
+    <Button
+        android:id="@+id/btnAgregarComida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Agregar Comida" />
+
+    <TextView
+        android:id="@+id/textCaloriasConsumidas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calorías consumidas hoy: 0"
+        android:paddingTop="16dp"/>
+
 </LinearLayout>

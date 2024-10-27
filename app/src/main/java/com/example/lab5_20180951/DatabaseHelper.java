@@ -2,6 +2,7 @@ package com.example.lab5_20180951;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -36,5 +37,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(TABLE_NAME, null, contentValues);
         return result != -1;
     }
+
+    public int getTotalCalorias() {
+        int total = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT SUM(CALORIAS) FROM comidas", null);
+        if (cursor.moveToFirst()) {
+            total = cursor.getInt(0);
+        }
+        cursor.close();
+        return total;
+    }
+
 }
 

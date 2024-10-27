@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editPeso, editAltura, editEdad;
     private Spinner spinnerGenero, spinnerNivelActividad, spinnerObjetivo;
-    private TextView textCaloriasRecomendadas;
-
+    private TextView textCaloriasRecomendadas, textCaloriasConsumidas;
+    private DatabaseHelper databaseHelper;
     private int caloriasRecomendadas;
 
     @Override
@@ -34,10 +35,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        programarRecordatorios();
-
-
-        // Inicialización de elementos de UI
         editPeso = findViewById(R.id.editPeso);
         editAltura = findViewById(R.id.editAltura);
         editEdad = findViewById(R.id.editEdad);
@@ -45,11 +42,27 @@ public class MainActivity extends AppCompatActivity {
         spinnerNivelActividad = findViewById(R.id.spinnerNivelActividad);
         spinnerObjetivo = findViewById(R.id.spinnerObjetivo);
         textCaloriasRecomendadas = findViewById(R.id.textCaloriasRecomendadas);
+        textCaloriasConsumidas = findViewById(R.id.textCaloriasConsumidas);
+        databaseHelper = new DatabaseHelper(this);
 
         findViewById(R.id.btnCalcularCalorias).setOnClickListener(view -> calcularCalorias());
+        findViewById(R.id.btnAgregarComida).setOnClickListener(view -> abrirAddFoodActivity());
+
+        actualizarCaloriasConsumidas();
     }
 
     private void calcularCalorias() {
+        // Verificar si los campos están vacíos antes de intentar parsear
+        if (editPeso.getText().toString().isEmpty() ||
+                editAltura.getText().toString().isEmpty() ||
+                editEdad.getText().toString().isEmpty()) {
+
+            // Mostrar mensaje al usuario
+            Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
+            return; // Detener la ejecución del método si falta algún dato
+        }
+
+        // Si todos los campos están llenos, proceder con el cálculo
         double peso = Double.parseDouble(editPeso.getText().toString());
         double altura = Double.parseDouble(editAltura.getText().toString());
         int edad = Integer.parseInt(editEdad.getText().toString());
@@ -70,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         textCaloriasRecomendadas.setText("Calorías recomendadas: " + caloriasRecomendadas);
     }
 
+
     private double getFactorActividad(String nivelActividad) {
         switch (nivelActividad) {
             case "Sedentario":
@@ -84,6 +98,22 @@ public class MainActivity extends AppCompatActivity {
                 return 1.2;
         }
     }
+    private void abrirAddFoodActivity() {
+        Intent intent = new Intent(this, AddFoodActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        actualizarCaloriasConsumidas(); // Actualizar cada vez que se regresa a esta actividad
+    }
+
+    private void actualizarCaloriasConsumidas() {
+        int totalCalorias = databaseHelper.getTotalCalorias(); // Método que suma las calorías de todas las comidas del día
+        textCaloriasConsumidas.setText("Calorías consumidas hoy: " + totalCalorias);
+    }
+
 
     private void verificarExcesoCalorias(int caloriasConsumidas) {
         if (caloriasConsumidas > caloriasRecomendadas) {
