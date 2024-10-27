@@ -49,5 +49,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return total;
     }
 
+
+    public void resetearCalorias() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM comidas"); // Borra todas las entradas de la tabla de comidas
+    }
+
+
 }
 

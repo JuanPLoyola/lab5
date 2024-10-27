@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editIntervaloObjetivo;
     private Button btnProgramarObjetivo;
+    private Button btnReiniciarCalorias;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         editIntervaloObjetivo = findViewById(R.id.editIntervaloObjetivo);
         btnProgramarObjetivo = findViewById(R.id.btnProgramarObjetivo);
 
+        btnReiniciarCalorias = findViewById(R.id.btnReiniciarCalorias);
+
 
 
         findViewById(R.id.btnCalcularCalorias).setOnClickListener(view -> calcularCalorias());
@@ -69,8 +73,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        btnReiniciarCalorias.setOnClickListener(view -> reiniciarCalorias());
+        programarReinicioDiario();
         actualizarCaloriasConsumidas();
+
     }
 
     private void programarNotificacionObjetivo(int intervaloMinutos) {
@@ -197,6 +203,29 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, hora.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    private void reiniciarCalorias() {
+        databaseHelper.resetearCalorias(); // Llama al método que borra las calorías en la base de datos
+        actualizarCaloriasConsumidas();
+        Toast.makeText(this, "Calorías reiniciadas", Toast.LENGTH_SHORT).show();
+    }
+
+    private void programarReinicioDiario() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        // Configuración de la alarma para las 12:00 AM cada día
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        Intent intent = new Intent(this, ReinicioCaloriasReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, 105, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
 

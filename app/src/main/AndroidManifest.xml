@@ -29,6 +29,8 @@
 
         <receiver android:name=".AlarmaReceiver"/>
         <receiver android:name=".ObjetivoReceiver" />
+        <receiver android:name=".ReinicioCaloriasReceiver" />
+
     </application>
 
 </manifest>
